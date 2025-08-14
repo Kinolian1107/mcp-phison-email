@@ -1,21 +1,30 @@
-# MCP Phison Mail Docker Configuration
+FROM node:lts-alpine AS builder
+
+WORKDIR /app
+
+# 複製 package.json 和 package-lock.json 使用 * 可以同時複製 package.json 和 package-lock.json
+COPY package*.json ./
+
+RUN npm install
+
+# 複製所有專案原始碼到工作目錄 因為有 .dockerignore，所以 node_modules 不會被複製
+COPY . .
+
+# For tsc Permission denied
+RUN chmod +x /app/node_modules/.bin/tsc
+
+RUN npm run build
+
 FROM node:lts-alpine
 
 WORKDIR /app
 
-# Copy package files and TypeScript config
-COPY package*.json tsconfig.json ./
+COPY package*.json ./
 
-# Install deps without running build scripts
-RUN npm install --ignore-scripts
+RUN npm install --omit=dev
 
-# Copy source files
-COPY . .
-
-# Build the TypeScript code
-RUN npm run build
-
-# Entry point runs the Node server
-ENTRYPOINT ["node", "dist/sse-server.js --port 8299 --host localhost"]
+COPY --from=builder /app/dist ./dist
 
 EXPOSE 8299
+
+ENTRYPOINT ["node", "dist/sse-server.js", "--port", "8299", "--host", "localhost"]
