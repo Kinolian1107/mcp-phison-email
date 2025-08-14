@@ -1,0 +1,24 @@
+{
+  "mcpServers": {
+    "mail-mcp": {
+      "command": "pythonw",
+      "args": [
+        "C:/Users/your-username/mcp-mail/bridging_mail_mcp.py"
+      ],
+      "env": {
+        "SMTP_HOST": "your.smtp.server",
+        "SMTP_PORT": "25",
+        "SMTP_SECURE": "false",
+        "SMTP_USER": "your.email@domain.com",
+        "SMTP_PASS": "your_password",
+        "IMAP_HOST": "your.imap.server",
+        "IMAP_PORT": "993",
+        "IMAP_SECURE": "true",
+        "IMAP_USER": "your.email@domain.com",
+        "IMAP_PASS": "your_password",
+        "DEFAULT_FROM_NAME": "Your Name",
+        "DEFAULT_FROM_EMAIL": "your.email@domain.com"
+      }
+    }
+  }
+}

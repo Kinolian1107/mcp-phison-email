@@ -1,0 +1,44 @@
+{
+  "name": "mcp-phison-mail",
+  "version": "1.0.0",
+  "description": "郵件管理發送的MCP工具",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "start:sse": "node dist/sse-server.js",
+    "dev": "ts-node-dev --respawn src/index.ts",
+    "dev:sse": "ts-node-dev --respawn src/sse-server.ts",
+    "test": "jest"
+  },
+  "keywords": [
+    "mcp",
+    "mail",
+    "email",
+    "smtp",
+    "imap",
+    "tools"
+  ],
+  "author": "kino_lian",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.6.1",
+    "@types/express": "^5.0.3",
+    "@types/node": "^20.0.0",
+    "dotenv": "^16.0.3",
+    "express": "^5.1.0",
+    "imap": "^0.8.17",
+    "mailparser": "^3.6.4",
+    "nodemailer": "^6.9.1",
+    "typescript": "^5.0.0",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/imap": "^0.8.40",
+    "@types/mailparser": "^3.4.0",
+    "@types/nodemailer": "^6.4.9",
+    "ts-node": "^10.9.1",
+    "ts-node-dev": "^2.0.0"
+  }
+}
