@@ -29,11 +29,11 @@ export class ProcessManager {
         // 只清理自己的鎖檔案
         if (lockData.instanceId === this.instanceId) {
           fs.unlinkSync(LOCK_FILE);
-          console.log('已清理程序鎖檔案');
+          console.log('Process lock file cleaned up');
         }
       }
     } catch (error) {
-      console.error('清理鎖檔案時出錯:', error);
+      console.error('Error cleaning up lock file:', error);
     }
   }
 
@@ -61,15 +61,15 @@ export class ProcessManager {
         try {
           // 檢查程序是否還在運行
           process.kill(lockData.pid, 0);
-          console.log('檢測到已有MCP實例運行，發送終止訊號');
+          console.log('Detected existing MCP instance running, sending termination signal');
           // 發送終止訊號
           process.kill(lockData.pid, 'SIGTERM');
           
           // 等待舊程序退出
-          console.log('等待舊實例退出...');
+          console.log('Waiting for old instance to exit...');
           const exited = await this.waitForProcessExit(lockData.pid);
           if (!exited) {
-            console.error('等待舊實例退出逾時');
+            console.error('Timeout waiting for old instance to exit');
             return false;
           }
           
@@ -77,7 +77,7 @@ export class ProcessManager {
           fs.unlinkSync(LOCK_FILE);
         } catch (e) {
           // 程序不存在，刪除過期的鎖檔案
-          console.log('檢測到過期的鎖檔案，將建立新實例');
+          console.log('Detected expired lock file, will create new instance');
           fs.unlinkSync(LOCK_FILE);
         }
       }
@@ -89,10 +89,10 @@ export class ProcessManager {
         timestamp: Date.now()
       }));
 
-      console.log('已建立MCP實例鎖檔案');
+      console.log('MCP instance lock file created');
       return true;
     } catch (error) {
-      console.error('處理鎖檔案時出錯:', error);
+      console.error('Error handling lock file:', error);
       return false;
     }
   }

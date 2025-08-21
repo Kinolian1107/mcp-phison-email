@@ -137,7 +137,7 @@ IMAP_PASS=your_password
 Optional variables:
 DEFAULT_FROM_NAME=Your Name
 DEFAULT_FROM_EMAIL=your.email@domain.com
-SMTP_ALLOW_UNAUTHORIZED_CERT=true/false (控制SSL證書驗證，true=允許未授權證書，false=嚴格驗證)
+SMTP_ALLOW_UNAUTHORIZED_CERT=true/false (Control SSL certificate validation, true = allow unauthorized certificates, false = strict validation)
 
 Note: For port 25 (non-TLS SMTP), set SMTP_SECURE=false
 Note: Set SMTP_ALLOW_UNAUTHORIZED_CERT=true if you have SSL certificate issues
@@ -213,12 +213,12 @@ Note: Empty strings are allowed for initial MCP client setup
           if (!params.text && !params.html) {
             return {
               content: [
-                { type: "text", text: `郵件內容不能為空，請提供text或html參數。` }
+                { type: "text", text: `Email content cannot be empty. Please provide text or html parameter.` }
               ]
             };
           }
           
-          console.log(`開始群發郵件，收件人數量: ${params.to.length}`);
+          console.log(`Start sending bulk emails, number of recipients: ${params.to.length}`);
           
           const results = [];
           let successCount = 0;
@@ -253,7 +253,7 @@ Note: Empty strings are allowed for initial MCP client setup
                 await new Promise(resolve => setTimeout(resolve, 1000));
               }
             } catch (error) {
-              console.error(`發送批次 ${i / batchSize + 1} 時出錯:`, error);
+              console.error(`Error sending batch ${i / batchSize + 1}:`, error);
               failureCount += batch.length;
             }
           }
@@ -262,8 +262,8 @@ Note: Empty strings are allowed for initial MCP client setup
             content: [
               { 
                 type: "text", 
-                text: `群發郵件完成。\n成功: ${successCount}個收件人\n失敗: ${failureCount}個收件人\n\n${
-                  failureCount > 0 ? '部分郵件發送失敗，可能是由於郵件服務器限制或收件人地址無效。' : ''
+                text: `Bulk email sending completed.\nSuccessful: ${successCount} recipients\nFailed: ${failureCount} recipients\n\n${
+                  failureCount > 0 ? 'Some emails failed to send, possibly due to mail server restrictions or invalid recipient addresses.' : ''
                 }`
               }
             ]
@@ -271,7 +271,7 @@ Note: Empty strings are allowed for initial MCP client setup
         } catch (error) {
           return {
             content: [
-              { type: "text", text: `群發郵件時發生錯誤: ${error instanceof Error ? error.message : String(error)}` }
+              { type: "text", text: `Error occurred while sending bulk emails: ${error instanceof Error ? error.message : String(error)}` }
             ]
           };
         }
@@ -303,7 +303,7 @@ Note: Empty strings are allowed for initial MCP client setup
           if (!params.text && !params.html) {
             return {
               content: [
-                { type: "text", text: `郵件內容不能為空，請提供text或html參數。` }
+                { type: "text", text: `Email content cannot be empty. Please provide text or html parameter.` }
               ]
             };
           }
@@ -347,20 +347,20 @@ Note: Empty strings are allowed for initial MCP client setup
           if (result.success) {
             return {
               content: [
-                { type: "text", text: `郵件發送成功，消息ID: ${result.messageId}\n\n提示：如果需要等待對方回覆，可以使用 waitForReply 工具。` }
+                { type: "text", text: `Email sent successfully, message ID: ${result.messageId}\n\nTip: If you need to wait for a reply, you can use the waitForReply tool.` }
               ]
             };
           } else {
             return {
               content: [
-                { type: "text", text: `郵件發送失敗: ${result.error}` }
+                { type: "text", text: `Email sending failed: ${result.error}` }
               ]
             };
           }
         } catch (error) {
           return {
             content: [
-              { type: "text", text: `發送郵件時發生錯誤: ${error instanceof Error ? error.message : String(error)}` }
+              { type: "text", text: `Error occurred while sending email: ${error instanceof Error ? error.message : String(error)}` }
             ]
           };
         }
@@ -387,20 +387,20 @@ Note: Empty strings are allowed for initial MCP client setup
           if (result.success) {
             return {
               content: [
-                { type: "text", text: `簡單郵件發送成功，消息ID: ${result.messageId}\n\n提示：如果需要等待對方回覆，可以使用 waitForReply 工具。` }
+                { type: "text", text: `Simple email sent successfully, message ID: ${result.messageId}\n\nTip: If you need to wait for a reply, you can use the waitForReply tool.` }
               ]
             };
           } else {
             return {
               content: [
-                { type: "text", text: `簡單郵件發送失敗: ${result.error}` }
+                { type: "text", text: `Simple email sending failed: ${result.error}` }
               ]
             };
           }
         } catch (error) {
           return {
             content: [
-              { type: "text", text: `發送簡單郵件時發生錯誤: ${error instanceof Error ? error.message : String(error)}` }
+              { type: "text", text: `Error occurred while sending simple email: ${error instanceof Error ? error.message : String(error)}` }
             ]
           };
         }
@@ -450,20 +450,20 @@ Note: Empty strings are allowed for initial MCP client setup
           if (result.success) {
             return {
               content: [
-                { type: "text", text: `HTML郵件發送成功，消息ID: ${result.messageId}\n\n提示：如果需要等待對方回覆，可以使用 waitForReply 工具。` }
+                { type: "text", text: `HTML email sent successfully. Message ID: ${result.messageId}\n\nTip: If you need to wait for a reply, you can use the waitForReply tool.` }
               ]
             };
           } else {
             return {
               content: [
-                { type: "text", text: `HTML郵件發送失敗: ${result.error}` }
+                { type: "text", text: `HTML email sending failed: ${result.error}` }
               ]
             };
           }
         } catch (error) {
           return {
             content: [
-              { type: "text", text: `發送HTML郵件時發生錯誤: ${error instanceof Error ? error.message : String(error)}` }
+              { type: "text", text: `Error occurred while sending HTML email: ${error instanceof Error ? error.message : String(error)}` }
             ]
           };
         }
@@ -490,21 +490,21 @@ Note: Empty strings are allowed for initial MCP client setup
           
           // 如果是未讀郵件警告
           if (result && typeof result === 'object' && 'type' in result && result.type === 'unread_warning') {
-            let warningText = `⚠️ 檢測到${result.mails.length}封最近5分鐘內的未讀郵件。\n`;
-            warningText += `請先處理（閱讀或回覆）這些郵件，再繼續等待新回覆：\n\n`;
+            let warningText = `⚠️ ${result.mails.length} unread emails detected in the last 5 minutes.\n`;
+            warningText += `Please process (read or reply) these emails before continuing to wait for new replies:\n\n`;
             
             result.mails.forEach((mail, index) => {
               const fromStr = mail.from.map(f => f.name ? `${f.name} <${f.address}>` : f.address).join(', ');
-              warningText += `${index + 1}. 主題: ${mail.subject}\n`;
-              warningText += `   發件人: ${fromStr}\n`;
-              warningText += `   時間: ${mail.date.toLocaleString()}\n`;
+              warningText += `${index + 1}. Subject: ${mail.subject}\n`;
+              warningText += `   Sender: ${fromStr}\n`;
+              warningText += `   Time: ${mail.date.toLocaleString()}\n`;
               warningText += `   UID: ${mail.uid}\n\n`;
             });
             
-            warningText += `提示：\n`;
-            warningText += `1. 使用 markAsRead 工具將郵件標記為已讀\n`;
-            warningText += `2. 使用 getEmailDetail 工具查看郵件詳情\n`;
-            warningText += `3. 處理完這些郵件後，再次調用 waitForReply 工具等待新回覆\n`;
+            warningText += `Tips:\n`;
+            warningText += `1. Use the [markAsRead] tool to mark emails as read\n`;
+            warningText += `2. Use the [getEmailDetail] tool to view email details\n`;
+            warningText += `3. After processing these emails, call the [waitForReply] tool again to wait for new replies\n`;
             
             return {
               content: [
@@ -517,7 +517,7 @@ Note: Empty strings are allowed for initial MCP client setup
           if (!result) {
             return {
               content: [
-                { type: "text", text: `等待郵件回覆超時（${timeout / 1000}秒）` }
+                { type: "text", text: `Timeout waiting for email reply (${timeout / 1000} seconds)` }
               ]
             };
           }
@@ -526,17 +526,17 @@ Note: Empty strings are allowed for initial MCP client setup
           const email = result as MailItem;  // 添加類型斷言
           const fromStr = email.from.map(f => f.name ? `${f.name} <${f.address}>` : f.address).join(', ');
           const date = email.date.toLocaleString();
-          const status = email.isRead ? '已讀' : '未讀';
+          const status = email.isRead ? 'Read' : 'Unread';
           const attachmentInfo = email.hasAttachments ? '📎' : '';
           
-          let resultText = `收到新郵件！\n\n`;
-          resultText += `[${status}] ${attachmentInfo} 來自: ${fromStr}\n`;
-          resultText += `主題: ${email.subject}\n`;
-          resultText += `時間: ${date}\n`;
+          let resultText = `New email received!\n\n`;
+          resultText += `[${status}] ${attachmentInfo} From: ${fromStr}\n`;
+          resultText += `Subject: ${email.subject}\n`;
+          resultText += `Time: ${date}\n`;
           resultText += `UID: ${email.uid}\n\n`;
           
           if (email.textBody) {
-            resultText += `內容:\n${email.textBody}\n\n`;
+            resultText += `Content:\n${email.textBody}\n\n`;
           }
           
           return {
@@ -547,7 +547,7 @@ Note: Empty strings are allowed for initial MCP client setup
         } catch (error) {
           return {
             content: [
-              { type: "text", text: `等待郵件回覆時發生錯誤: ${error instanceof Error ? error.message : String(error)}` }
+              { type: "text", text: `Error occurred while waiting for email reply: ${error instanceof Error ? error.message : String(error)}` }
             ]
           };
         }
@@ -561,8 +561,8 @@ Note: Empty strings are allowed for initial MCP client setup
       {
         keywords: z.string().optional(),
         folders: z.array(z.string()).optional(),
-        startDate: z.union([z.date(), z.string().datetime({ message: "startDate 必須是有效的 ISO 8601 日期時間字符串或 Date 對象" })]).optional(),
-        endDate: z.union([z.date(), z.string().datetime({ message: "endDate 必須是有效的 ISO 8601 日期時間字符串或 Date 對象" })]).optional(),
+        startDate: z.union([z.date(), z.string().describe("startDate must be a valid ISO 8601 datetime string or a Date object. e.g. 2025-08-21T00:00:00Z").datetime({ message: "startDate must be a valid ISO 8601 datetime string or a Date object. e.g. 2025-08-21T00:00:00Z" })]).optional(),
+        endDate: z.union([z.date(), z.string().describe("endDate must be a valid ISO 8601 datetime string or a Date object. e.g. 2025-08-21T00:00:00Z").datetime({ message: "endDate must be a valid ISO 8601 datetime string or a Date object. e.g. 2025-08-21T00:00:00Z" })]).optional(),
         from: z.string().optional(),
         to: z.string().optional(),
         subject: z.string().optional(),
@@ -572,7 +572,7 @@ Note: Empty strings are allowed for initial MCP client setup
       },
       async (params) => {
         try {
-          console.log(`開始執行高級郵件搜索，關鍵詞: ${params.keywords || '無'}`);
+          console.log(`Starting advanced email search, keywords: ${params.keywords || 'none'}`);
           
           // 處理日期字符串
           const startDate = typeof params.startDate === 'string' ? new Date(params.startDate) : params.startDate;
@@ -595,41 +595,41 @@ Note: Empty strings are allowed for initial MCP client setup
           if (emails.length === 0) {
             return {
               content: [
-                { type: "text", text: `沒有找到符合條件的郵件。` }
+                { type: "text", text: `No matching emails were found.` }
               ]
             };
           }
           
           const searchTerms = [];
-          if (params.keywords) searchTerms.push(`關鍵詞"${params.keywords}"`);
-          if (params.from) searchTerms.push(`發件人包含"${params.from}"`);
-          if (params.to) searchTerms.push(`收件人包含"${params.to}"`);
-          if (params.subject) searchTerms.push(`主題包含"${params.subject}"`);
-          if (startDate) searchTerms.push(`開始日期${startDate.toLocaleDateString()}`);
-          if (endDate) searchTerms.push(`結束日期${endDate.toLocaleDateString()}`);
-          if (params.hasAttachment) searchTerms.push(`包含附件`);
+          if (params.keywords) searchTerms.push(`keywords "${params.keywords}"`);
+          if (params.from) searchTerms.push(`sender contains "${params.from}"`);
+          if (params.to) searchTerms.push(`recipient contains "${params.to}"`);
+          if (params.subject) searchTerms.push(`subject contains "${params.subject}"`);
+          if (startDate) searchTerms.push(`start date: ${startDate.toLocaleDateString()}`);
+          if (endDate) searchTerms.push(`end date: ${endDate.toLocaleDateString()}`);
+          if (params.hasAttachment) searchTerms.push(`has attachment`);
           
           const searchDescription = searchTerms.length > 0 
-            ? `搜索條件: ${searchTerms.join(', ')}` 
-            : '所有郵件';
+            ? `Search criteria: ${searchTerms.join(', ')}` 
+            : 'All emails';
           
-          let resultText = `🔍 郵件搜索結果 (${emails.length}封郵件)\n${searchDescription}\n\n`;
+          let resultText = `🔍 Email search results: (${emails.length} emails)\n${searchDescription}\n\n`;
           
           emails.forEach((email, index) => {
             const fromStr = email.from.map(f => f.name ? `${f.name} <${f.address}>` : f.address).join(', ');
             const date = email.date.toLocaleString();
-            const status = email.isRead ? '已讀' : '未讀';
-            const attachmentInfo = email.hasAttachments ? '有' : '';
+            const status = email.isRead ? 'read' : 'unread';
+            const attachmentInfo = email.hasAttachments ? '📎' : '';
             const folder = email.folder;
             
-            resultText += `${index + 1}. [${status}] ${attachmentInfo} 來自: ${fromStr}\n`;
-            resultText += `   主題: ${email.subject}\n`;
-            resultText += `   時間: ${date}\n`;
-            resultText += `   文件夾: ${folder}\n`;
+            resultText += `${index + 1}. [${status}] ${attachmentInfo} From: ${fromStr}\n`;
+            resultText += `   Subject: ${email.subject}\n`;
+            resultText += `   Time: ${date}\n`;
+            resultText += `   Folder: ${folder}\n`;
             resultText += `   UID: ${email.uid}\n\n`;
           });
           
-          resultText += `使用 getEmailDetail 工具並提供 UID 和 folder 可以查看郵件詳情。`;
+          resultText += `Use the [getEmailDetail] tool and provide the UID and folder to view email details.`;
           
           return {
             content: [
@@ -639,7 +639,7 @@ Note: Empty strings are allowed for initial MCP client setup
         } catch (error) {
           return {
             content: [
-              { type: "text", text: `搜索郵件時發生錯誤: ${error instanceof Error ? error.message : String(error)}` }
+              { type: "text", text: `Error occurred while searching for emails: ${error instanceof Error ? error.message : String(error)}` }
             ]
           };
         }
@@ -657,8 +657,8 @@ Note: Empty strings are allowed for initial MCP client setup
         from: z.string().optional(),
         to: z.string().optional(),
         subject: z.string().optional(),
-        fromDate: z.union([z.date(), z.string().datetime({ message: "fromDate 必須是有效的 ISO 8601 日期時間字符串或 Date 對象" })]).optional(),
-        toDate: z.union([z.date(), z.string().datetime({ message: "toDate 必須是有效的 ISO 8601 日期時間字符串或 Date 對象" })]).optional(),
+        fromDate: z.union([z.date(), z.string().describe("fromDate must be a valid ISO 8601 datetime string or a Date object. e.g. 2025-08-21T00:00:00Z").datetime({ message: "fromDate must be a valid ISO 8601 datetime string or a Date object. e.g. 2025-08-21T00:00:00Z" })]).optional(),
+        toDate: z.union([z.date(), z.string().describe("toDate must be a valid ISO 8601 datetime string or a Date object. e.g. 2025-08-21T00:00:00Z").datetime({ message: "toDate must be a valid ISO 8601 datetime string or a Date object. e.g. 2025-08-21T00:00:00Z" })]).optional(),
         hasAttachments: z.boolean().optional()
       },
       async (params) => {
@@ -685,26 +685,26 @@ Note: Empty strings are allowed for initial MCP client setup
           if (emails.length === 0) {
             return {
               content: [
-                { type: "text", text: `在${params.folder}文件夾中沒有找到符合條件的郵件。` }
+                { type: "text", text: `No matching emails were found in folder: ${params.folder}.` }
               ]
             };
           }
           
-          let resultText = `在${params.folder}文件夾中找到了${emails.length}封郵件：\n\n`;
+          let resultText = `Found ${emails.length} emails in folder: ${params.folder}\n\n`;
           
           emails.forEach((email, index) => {
             const fromStr = email.from.map(f => f.name ? `${f.name} <${f.address}>` : f.address).join(', ');
             const date = email.date.toLocaleString();
-            const status = email.isRead ? '已讀' : '未讀';
+            const status = email.isRead ? 'Read' : 'Unread';
             const attachmentInfo = email.hasAttachments ? '📎' : '';
             
-            resultText += `${index + 1}. [${status}] ${attachmentInfo} 來自: ${fromStr}\n`;
-            resultText += `   主題: ${email.subject}\n`;
-            resultText += `   時間: ${date}\n`;
+            resultText += `${index + 1}. [${status}] ${attachmentInfo} From: ${fromStr}\n`;
+            resultText += `   Subject: ${email.subject}\n`;
+            resultText += `   Time: ${date}\n`;
             resultText += `   UID: ${email.uid}\n\n`;
           });
           
-          resultText += `使用 getEmailDetail 工具並提供 UID 可以查看郵件詳情。`;
+          resultText += `Use the [getEmailDetail] tool and provide the UID to view the email details.`;
           
           return {
             content: [
@@ -714,7 +714,7 @@ Note: Empty strings are allowed for initial MCP client setup
         } catch (error) {
           return {
             content: [
-              { type: "text", text: `獲取郵件列表時發生錯誤: ${error instanceof Error ? error.message : String(error)}` }
+              { type: "text", text: `Error occurred while retrieving email list: ${error instanceof Error ? error.message : String(error)}` }
             ]
           };
         }
@@ -741,8 +741,8 @@ Note: Empty strings are allowed for initial MCP client setup
           // 轉換為人類可讀格式
           if (contacts.length === 0) {
             const message = params.searchTerm 
-              ? `沒有找到包含"${params.searchTerm}"的聯系人。` 
-              : `沒有找到任何聯系人。`;
+              ? `No contacts found containing "${params.searchTerm}".` 
+              : `No contacts found.`;
             
             return {
               content: [
@@ -752,19 +752,19 @@ Note: Empty strings are allowed for initial MCP client setup
           }
           
           const header = params.searchTerm 
-            ? `📋 搜索結果: 包含"${params.searchTerm}"的聯系人 (${contacts.length}個):\n\n` 
-            : `📋 聯系人列表 (${contacts.length}個):\n\n`;
+            ? `📋 Search results: contacts containing "${params.searchTerm}" (${contacts.length} contacts):\n\n` 
+            : `📋 Contact list (${contacts.length} contacts):\n\n`;
           
           let resultText = header;
           
           contacts.forEach((contact, index) => {
-            const name = contact.name || '(無名稱)';
+            const name = contact.name || '(No name)';
             const frequency = contact.frequency;
-            const lastContact = contact.lastContact ? contact.lastContact.toLocaleDateString() : '未知';
+            const lastContact = contact.lastContact ? contact.lastContact.toLocaleDateString() : 'Unknown';
             
             resultText += `${index + 1}. ${name} <${contact.email}>\n`;
-            resultText += `   郵件頻率: ${frequency}次\n`;
-            resultText += `   最後聯系: ${lastContact}\n\n`;
+            resultText += `   Email frequency: ${frequency} times\n`;
+            resultText += `   Last contact: ${lastContact}\n\n`;
           });
           
           return {
@@ -775,7 +775,7 @@ Note: Empty strings are allowed for initial MCP client setup
         } catch (error) {
           return {
             content: [
-              { type: "text", text: `獲取聯系人時發生錯誤: ${error instanceof Error ? error.message : String(error)}` }
+              { type: "text", text: `Error occurred while getting contacts: ${error instanceof Error ? error.message : String(error)}` }
             ]
           };
         }
@@ -802,7 +802,7 @@ Note: Empty strings are allowed for initial MCP client setup
           
           // 如果正常獲取失敗，嘗試通過搜索來獲取指定UID的郵件
           if (!email) {
-            console.log(`通過常規方法獲取郵件詳情失敗，嘗試使用搜索方法獲取UID為${numericUid}的郵件`);
+            console.log(`Failed to get email details through normal method, trying search method for UID ${numericUid}`);
             const searchResults = await this.ensureMailService().searchMails({ 
               folder: folder,
               limit: 50 // 搜索更多郵件以提高找到目標的可能性
@@ -811,17 +811,17 @@ Note: Empty strings are allowed for initial MCP client setup
             // 從搜索結果中找到指定UID的郵件
             const foundEmail = searchResults.find(e => e.uid === numericUid);
             if (foundEmail) {
-              console.log(`在搜索結果中找到了UID為${numericUid}的郵件`);
+              console.log(`Found email with UID ${numericUid} in search results`);
               email = foundEmail;
               
               // 嘗試獲取郵件正文（如果沒有）
               if (!email.textBody && !email.htmlBody) {
-                console.log(`郵件沒有正文內容，嘗試單獨獲取正文`);
+                console.log(`Email has no body content, trying to get body separately`);
                 try {
                   // 這里可以添加額外的嘗試獲取正文的邏輯
                   // ...
                 } catch (e) {
-                  console.error('獲取郵件正文時出錯:', e);
+                  console.error('Error getting email body:', e);
                 }
               }
             }
@@ -830,7 +830,7 @@ Note: Empty strings are allowed for initial MCP client setup
           if (!email) {
             return {
               content: [
-                { type: "text", text: `未找到UID為${numericUid}的郵件` }
+                { type: "text", text: `Email with UID ${numericUid} not found` }
               ]
             };
           }
@@ -840,19 +840,19 @@ Note: Empty strings are allowed for initial MCP client setup
           const toStr = email.to.map(t => t.name ? `${t.name} <${t.address}>` : t.address).join(', ');
           const ccStr = email.cc ? email.cc.map(c => c.name ? `${c.name} <${c.address}>` : c.address).join(', ') : '';
           const date = email.date.toLocaleString();
-          const status = email.isRead ? '已讀' : '未讀';
+          const status = email.isRead ? 'Read' : 'Unread';
           
-          let resultText = `📧 郵件詳情 (UID: ${email.uid})\n\n`;
-          resultText += `主題: ${email.subject}\n`;
-          resultText += `發件人: ${fromStr}\n`;
-          resultText += `收件人: ${toStr}\n`;
-          if (ccStr) resultText += `抄送: ${ccStr}\n`;
-          resultText += `日期: ${date}\n`;
-          resultText += `狀態: ${status}\n`;
-          resultText += `文件夾: ${email.folder}\n`;
+          let resultText = `📧 Email Details (UID: ${email.uid})\n\n`;
+          resultText += `Subject: ${email.subject}\n`;
+          resultText += `From: ${fromStr}\n`;
+          resultText += `To: ${toStr}\n`;
+          if (ccStr) resultText += `CC: ${ccStr}\n`;
+          resultText += `Date: ${date}\n`;
+          resultText += `Status: ${status}\n`;
+          resultText += `Folder: ${email.folder}\n`;
           
           if (email.hasAttachments && email.attachments && email.attachments.length > 0) {
-            resultText += `\n📎 附件 (${email.attachments.length}個):\n`;
+            resultText += `\n📎 Attachments (${email.attachments.length}):\n`;
             email.attachments.forEach((att, index) => {
               const sizeInKB = Math.round(att.size / 1024);
               resultText += `${index + 1}. ${att.filename} (${sizeInKB} KB, ${att.contentType})\n`;
@@ -865,17 +865,17 @@ Note: Empty strings are allowed for initial MCP client setup
             content = email.textBody;
           } else if (email.htmlBody) {
             // 簡單的HTML轉文本處理
-            content = '(HTML內容，顯示純文本版本)\n\n' + 
+            content = '(HTML content, showing plain text version)\n\n' + 
               email.htmlBody
                 .replace(/<br\s*\/?>/gi, '\n')
                 .replace(/<\/p>/gi, '\n\n')
                 .replace(/<[^>]*>/g, '');
           } else {
-            content = '(郵件沒有文本內容或內容無法獲取)\n\n' +
-              '可能原因：\n' +
-              '1. QQ郵箱IMAP訪問限制\n' +
-              '2. 郵件內容格式特殊\n' +
-              '建議直接在QQ郵箱網頁或客戶端查看完整內容';
+            content = '(Email has no text content or content cannot be retrieved)\n\n' +
+              'Possible reasons:\n' +
+              '1. QQ Mail IMAP access restrictions\n' +
+              '2. Special email content format\n' +
+              'Please view complete content directly in QQ Mail web or client';
           }
           
           // 計算內容總長度
@@ -888,12 +888,12 @@ Note: Empty strings are allowed for initial MCP client setup
           // 根據範圍截取內容
           const selectedContent = content.substring(start, end);
           
-          resultText += `\n📄 內容 (${start+1}-${end}/${totalLength}字符):\n\n`;
+          resultText += `\n📄 Content (${start+1}-${end}/${totalLength} characters):\n\n`;
           resultText += selectedContent;
           
           // 如果有更多內容，添加提示
           if (end < totalLength) {
-            resultText += `\n\n[...]\n\n(內容過長，僅顯示前${end}個字符。使用contentRange參數可查看更多內容，例如查看${end+1}-${Math.min(end+2000, totalLength)}範圍：contentRange.start=${end}, contentRange.end=${Math.min(end+2000, totalLength)})`;
+            resultText += `\n\n[...]\n\n(Content too long, only showing first ${end} characters. Use contentRange parameter to view more content, e.g., to view range ${end+1}-${Math.min(end+2000, totalLength)}: contentRange.start=${end}, contentRange.end=${Math.min(end+2000, totalLength)})`;
           }
           
           return {
@@ -904,7 +904,7 @@ Note: Empty strings are allowed for initial MCP client setup
         } catch (error) {
           return {
             content: [
-              { type: "text", text: `獲取郵件詳情時發生錯誤: ${error instanceof Error ? error.message : String(error)}` }
+              { type: "text", text: `Error occurred while getting email details: ${error instanceof Error ? error.message : String(error)}` }
             ]
           };
         }
@@ -927,20 +927,20 @@ Note: Empty strings are allowed for initial MCP client setup
           if (success) {
             return {
               content: [
-                { type: "text", text: `郵件(UID: ${numericUid})已從${folder}文件夾中刪除` }
+                { type: "text", text: `Email (UID: ${numericUid}) deleted from folder ${folder}` }
               ]
             };
           } else {
             return {
               content: [
-                { type: "text", text: `刪除郵件(UID: ${numericUid})失敗` }
+                { type: "text", text: `Failed to delete email (UID: ${numericUid})` }
               ]
             };
           }
         } catch (error) {
           return {
             content: [
-              { type: "text", text: `刪除郵件時發生錯誤: ${error instanceof Error ? error.message : String(error)}` }
+              { type: "text", text: `Error occurred while deleting email: ${error instanceof Error ? error.message : String(error)}` }
             ]
           };
         }
@@ -964,20 +964,20 @@ Note: Empty strings are allowed for initial MCP client setup
           if (success) {
             return {
               content: [
-                { type: "text", text: `郵件(UID: ${numericUid})已成功從"${sourceFolder}"移動到"${targetFolder}"文件夾` }
+                { type: "text", text: `Email (UID: ${numericUid}) successfully moved from "${sourceFolder}" to "${targetFolder}" folder` }
               ]
             };
           } else {
             return {
               content: [
-                { type: "text", text: `移動郵件(UID: ${numericUid})失敗` }
+                { type: "text", text: `Failed to move email (UID: ${numericUid})` }
               ]
             };
           }
         } catch (error) {
           return {
             content: [
-              { type: "text", text: `移動郵件時發生錯誤: ${error instanceof Error ? error.message : String(error)}` }
+              { type: "text", text: `Error occurred while moving email: ${error instanceof Error ? error.message : String(error)}` }
             ]
           };
         }
@@ -1005,7 +1005,7 @@ Note: Empty strings are allowed for initial MCP client setup
           if (!attachment) {
             return {
               content: [
-                { type: "text", text: `未找到UID為${params.uid}的郵件的第${params.attachmentIndex}個附件` }
+                { type: "text", text: `Attachment ${params.attachmentIndex} not found for email UID ${params.uid}` }
               ]
             };
           }
@@ -1029,7 +1029,7 @@ Note: Empty strings are allowed for initial MCP client setup
               content: [
                 { 
                   type: "text", 
-                  text: `附件 "${attachment.filename}" 已下載保存至 ${filePath}\n類型: ${attachment.contentType}\n大小: ${Math.round(attachment.content.length / 1024)} KB` 
+                  text: `Attachment "${attachment.filename}" downloaded and saved to ${filePath}\nType: ${attachment.contentType}\nSize: ${Math.round(attachment.content.length / 1024)} KB` 
                 }
               ]
             };
@@ -1043,7 +1043,7 @@ Note: Empty strings are allowed for initial MCP client setup
                 content: [
                   { 
                     type: "text", 
-                    text: `📎 附件 "${attachment.filename}" (${attachment.contentType})\n\n${textContent.substring(0, 10000)}${textContent.length > 10000 ? '\n\n[內容過長，已截斷]' : ''}` 
+                    text: `📎 Attachment "${attachment.filename}" (${attachment.contentType})\n\n${textContent.substring(0, 10000)}${textContent.length > 10000 ? '\n\n[Content too long, truncated]' : ''}` 
                   }
                 ]
               };
@@ -1054,7 +1054,7 @@ Note: Empty strings are allowed for initial MCP client setup
                 content: [
                   { 
                     type: "text", 
-                    text: `📎 圖片附件 "${attachment.filename}" (${attachment.contentType})\n大小: ${Math.round(attachment.content.length / 1024)} KB\n\n[圖片內容已轉為Base64編碼，可用於在線預覽]` 
+                    text: `📎 Image attachment "${attachment.filename}" (${attachment.contentType})\nSize: ${Math.round(attachment.content.length / 1024)} KB\n\n[Image content converted to Base64 encoding for online preview]` 
                   }
                 ]
               };
@@ -1064,7 +1064,7 @@ Note: Empty strings are allowed for initial MCP client setup
                 content: [
                   { 
                     type: "text", 
-                    text: `📎 二進制附件 "${attachment.filename}" (${attachment.contentType})\n大小: ${Math.round(attachment.content.length / 1024)} KB\n\n[二進制內容無法直接顯示]` 
+                    text: `📎 Binary attachment "${attachment.filename}" (${attachment.contentType})\nSize: ${Math.round(attachment.content.length / 1024)} KB\n\n[Binary content cannot be displayed directly]` 
                   }
                 ]
               };
@@ -1073,7 +1073,7 @@ Note: Empty strings are allowed for initial MCP client setup
         } catch (error) {
           return {
             content: [
-              { type: "text", text: `獲取附件時發生錯誤: ${error instanceof Error ? error.message : String(error)}` }
+              { type: "text", text: `Error occurred while getting attachment: ${error instanceof Error ? error.message : String(error)}` }
             ]
           };
         }
@@ -1097,12 +1097,12 @@ Note: Empty strings are allowed for initial MCP client setup
           if (folders.length === 0) {
             return {
               content: [
-                { type: "text", text: "沒有找到郵件文件夾。" }
+                { type: "text", text: "No email folders found." }
               ]
             };
           }
           
-          let resultText = `📁 郵件文件夾列表 (${folders.length}個):\n\n`;
+          let resultText = `📁 Email folder list (${folders.length} folders):\n\n`;
           folders.forEach((folder, index) => {
             resultText += `${index + 1}. ${folder}\n`;
           });
@@ -1115,7 +1115,7 @@ Note: Empty strings are allowed for initial MCP client setup
         } catch (error) {
           return {
             content: [
-              { type: "text", text: `獲取郵件文件夾列表時發生錯誤: ${error instanceof Error ? error.message : String(error)}` }
+              { type: "text", text: `Error occurred while getting email folder list: ${error instanceof Error ? error.message : String(error)}` }
             ]
           };
         }
@@ -1143,20 +1143,20 @@ Note: Empty strings are allowed for initial MCP client setup
           if (success) {
             return {
               content: [
-                { type: "text", text: `已將 ${uids.length} 封郵件標記為已讀` }
+                { type: "text", text: `Marked ${uids.length} emails as read` }
               ]
             };
           } else {
             return {
               content: [
-                { type: "text", text: `批量標記郵件為已讀失敗` }
+                { type: "text", text: `Failed to mark emails as read in batch` }
               ]
             };
           }
         } catch (error) {
           return {
             content: [
-              { type: "text", text: `批量標記郵件為已讀時發生錯誤: ${error instanceof Error ? error.message : String(error)}` }
+              { type: "text", text: `Error occurred while marking emails as read in batch: ${error instanceof Error ? error.message : String(error)}` }
             ]
           };
         }
@@ -1179,20 +1179,20 @@ Note: Empty strings are allowed for initial MCP client setup
           if (success) {
             return {
               content: [
-                { type: "text", text: `已將 ${uids.length} 封郵件標記為未讀` }
+                { type: "text", text: `Marked ${uids.length} emails as unread` }
               ]
             };
           } else {
             return {
               content: [
-                { type: "text", text: `批量標記郵件為未讀失敗` }
+                { type: "text", text: `Failed to mark emails as unread in batch` }
               ]
             };
           }
         } catch (error) {
           return {
             content: [
-              { type: "text", text: `批量標記郵件為未讀時發生錯誤: ${error instanceof Error ? error.message : String(error)}` }
+              { type: "text", text: `Error occurred while marking emails as unread in batch: ${error instanceof Error ? error.message : String(error)}` }
             ]
           };
         }
@@ -1215,20 +1215,20 @@ Note: Empty strings are allowed for initial MCP client setup
           if (success) {
             return {
               content: [
-                { type: "text", text: `郵件(UID: ${uid})已標記為已讀` }
+                { type: "text", text: `Email (UID: ${uid}) marked as read` }
               ]
             };
           } else {
             return {
               content: [
-                { type: "text", text: `標記郵件(UID: ${uid})為已讀失敗` }
+                { type: "text", text: `Failed to mark email (UID: ${uid}) as read` }
               ]
             };
           }
         } catch (error) {
           return {
             content: [
-              { type: "text", text: `標記郵件為已讀時發生錯誤: ${error instanceof Error ? error.message : String(error)}` }
+              { type: "text", text: `Error occurred while marking email as read: ${error instanceof Error ? error.message : String(error)}` }
             ]
           };
         }
@@ -1251,20 +1251,20 @@ Note: Empty strings are allowed for initial MCP client setup
           if (success) {
             return {
               content: [
-                { type: "text", text: `郵件(UID: ${uid})已標記為未讀` }
+                { type: "text", text: `Email (UID: ${uid}) marked as unread` }
               ]
             };
           } else {
             return {
               content: [
-                { type: "text", text: `標記郵件(UID: ${uid})為未讀失敗` }
+                { type: "text", text: `Failed to mark email (UID: ${uid}) as unread` }
               ]
             };
           }
         } catch (error) {
           return {
             content: [
-              { type: "text", text: `標記郵件為未讀時發生錯誤: ${error instanceof Error ? error.message : String(error)}` }
+              { type: "text", text: `Error occurred while marking email as unread: ${error instanceof Error ? error.message : String(error)}` }
             ]
           };
         }
@@ -1283,20 +1283,20 @@ Note: Empty strings are allowed for initial MCP client setup
           if (result.success) {
             return {
               content: [
-                { type: "text", text: `✅ SMTP連接測試成功！\n\n配置信息：\n- 主機: ${result.config.host}\n- 端口: ${result.config.port}\n- 安全連接: ${result.config.secure ? '是' : '否'}` }
+                { type: "text", text: `✅ SMTP connection test successful!\n\nConfiguration info:\n- Host: ${result.config.host}\n- Port: ${result.config.port}\n- Secure connection: ${result.config.secure ? 'Yes' : 'No'}` }
               ]
             };
           } else {
             return {
               content: [
-                { type: "text", text: `❌ SMTP連接測試失敗！\n\n錯誤信息: ${result.error}\n\n當前配置：\n- 主機: ${result.config.host}\n- 端口: ${result.config.port}\n- 安全連接: ${result.config.secure ? '是' : '否'}\n\n請檢查您的SMTP配置是否正確。` }
+                { type: "text", text: `❌ SMTP connection test failed!\n\nError message: ${result.error}\n\nCurrent configuration:\n- Host: ${result.config.host}\n- Port: ${result.config.port}\n- Secure connection: ${result.config.secure ? 'Yes' : 'No'}\n\nPlease check if your SMTP configuration is correct.` }
               ]
             };
           }
         } catch (error) {
           return {
             content: [
-              { type: "text", text: `測試SMTP連接時發生錯誤: ${error instanceof Error ? error.message : String(error)}` }
+              { type: "text", text: `Error occurred while testing SMTP connection: ${error instanceof Error ? error.message : String(error)}` }
               ]
             };
         }

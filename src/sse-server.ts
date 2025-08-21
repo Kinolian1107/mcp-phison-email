@@ -105,7 +105,7 @@ class MailSSEServer {
     // SSE endpoint for establishing connections
     this.app.get('/sse', async (req: Request, res: Response) => {
       try {
-        console.log('新的SSE連線請求');
+        console.log('New SSE connection request');
 
         // Extract configuration from headers
         const config = this.extractConfigFromHeaders(req);
@@ -127,7 +127,7 @@ class MailSSEServer {
 
         // Handle connection cleanup
         res.on('close', () => {
-          console.log(`SSE連線已關閉，會話ID: ${sessionId}`);
+          console.log(`SSE connection closed, session ID: ${sessionId}`);
           const entry = this.transports.get(sessionId);
           if (entry) {
             entry.mailMCP.close();
@@ -138,12 +138,12 @@ class MailSSEServer {
         // Connect the mail MCP to the transport
         await mailMCP.connectToTransport(transport);
 
-        console.log(`SSE連線已建立，會話ID: ${sessionId}`);
+        console.log(`SSE connection established, session ID: ${sessionId}`);
 
       } catch (error) {
-        console.error('建立SSE連線錯誤:', error);
+        console.error('Error establishing SSE connection:', error);
         res.status(400).json({ 
-          error: error instanceof Error ? error.message : '未知錯誤' 
+          error: error instanceof Error ? error.message : 'Unknown error' 
         });
       }
     });
@@ -154,22 +154,22 @@ class MailSSEServer {
         const sessionId = req.query.sessionId as string;
         
         if (!sessionId) {
-          res.status(400).json({ error: '缺少sessionId查詢參數' });
+          res.status(400).json({ error: 'Missing sessionId query parameter' });
           return;
         }
 
         const entry = this.transports.get(sessionId);
         if (!entry) {
-          res.status(404).json({ error: '找不到會話' });
+          res.status(404).json({ error: 'Session not found' });
           return;
         }
 
         await entry.transport.handlePostMessage(req, res, req.body);
 
       } catch (error) {
-        console.error('處理訊息錯誤:', error);
+        console.error('Error handling message:', error);
         res.status(500).json({ 
-          error: error instanceof Error ? error.message : '未知錯誤' 
+          error: error instanceof Error ? error.message : 'Unknown error' 
         });
       }
     });
@@ -187,15 +187,15 @@ class MailSSEServer {
   public async start(port: number = 3000, host: string = '0.0.0.0') {
     // Check process mutex
     if (!await this.processManager.checkAndCreateLock()) {
-      console.log('無法創建MCP實例，程序退出');
+      console.log('Unable to create MCP instance, process exiting');
       process.exit(1);
     }
 
     return new Promise<void>((resolve, reject) => {
       const server = this.app.listen(port, host, () => {
-        console.log(`Mail MCP SSE 伺服器運行於 ${host}:${port}`);
-        console.log(`SSE 端點: http://${host}:${port}/sse`);
-        console.log(`訊息端點: http://${host}:${port}/messages`);
+        console.log(`Mail MCP SSE server running at ${host}:${port}`);
+        console.log(`SSE endpoint: http://${host}:${port}/sse`);
+        console.log(`Message endpoint: http://${host}:${port}/messages`);
         resolve();
       });
 
@@ -205,7 +205,7 @@ class MailSSEServer {
 
       // Handle graceful shutdown
       process.on('SIGINT', async () => {
-        console.log('正在關閉郵件MCP SSE服務...');
+        console.log('Shutting down Mail MCP SSE service...');
         
         // Close all active connections
         for (const [sessionId, entry] of this.transports) {
@@ -219,7 +219,7 @@ class MailSSEServer {
       });
 
       process.on('SIGTERM', async () => {
-        console.log('正在關閉郵件MCP SSE服務...');
+        console.log('Shutting down Mail MCP SSE service...');
         
         // Close all active connections
         for (const [sessionId, entry] of this.transports) {
@@ -252,18 +252,18 @@ function parseArgs() {
       i++;
     } else if (args[i] === '--help') {
       console.log(`
-使用方式: node sse-server.js [選項]
+Usage: node sse-server.js [options]
 
-選項:
-  -p, --port <port>    指定端口號 (預設: 3000)
-  -h, --host <host>    指定主機地址 (預設: 0.0.0.0)
-  --help              顯示此幫助訊息
+Options:
+  -p, --port <port>    Specify port number (default: 3000)
+  -h, --host <host>    Specify host address (default: 0.0.0.0)
+  --help              Show this help message
 
-環境變數:
-  PORT                 端口號 (被命令行參數覆蓋)
-  HOST                 主機地址 (被命令行參數覆蓋)
+Environment variables:
+  PORT                 Port number (overridden by command line arguments)
+  HOST                 Host address (overridden by command line arguments)
 
-範例:
+Examples:
   node sse-server.js --port 8080 --host localhost
   node sse-server.js -p 3001 -h 0.0.0.0
 `);
@@ -290,13 +290,13 @@ async function main() {
   try {
     await server.start(config.port, config.host);
   } catch (error) {
-    console.error('啟動SSE伺服器失敗:', error);
+    console.error('Failed to start SSE server:', error);
     process.exit(1);
   }
 }
 
 // 啟動應用
 main().catch(error => {
-  console.error('SSE服務啟動失敗:', error);
+  console.error('SSE service startup failed:', error);
   process.exit(1);
 });

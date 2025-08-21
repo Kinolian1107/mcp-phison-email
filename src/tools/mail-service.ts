@@ -120,7 +120,7 @@ export class MailService {
    */
   private validateConfigForOperation(): void {
     if (this.isEmptyConfig()) {
-      throw new Error('郵件配置為空，無法執行郵件操作。請使用有效的郵件配置重新初始化MCP Client。');
+      throw new Error('Mail configuration is empty, cannot perform email operations. Please reinitialize MCP Client with valid mail configuration.');
     }
   }
 
@@ -129,7 +129,7 @@ export class MailService {
 
     // 檢查是否為空配置（支援初始化MCP Client獲取工具列表）
     if (this.isEmptyConfig()) {
-      console.log('檢測到空配置，僅初始化MCP服務但不建立郵件連接');
+      console.log('Empty configuration detected, initializing MCP service only without establishing mail connection');
       // 為空配置創建虛擬傳輸器，避免初始化錯誤
       this.smtpTransporter = nodemailer.createTransport({
         streamTransport: true,
@@ -157,13 +157,13 @@ export class MailService {
       // 如果使用者設定允許未授權證書，則設置環境變數為1（拒絕未授權證書，但允許連接）
       if (process.env.NODE_TLS_REJECT_UNAUTHORIZED !== '1') {
         process.env.NODE_TLS_REJECT_UNAUTHORIZED = '1';
-        console.log('使用者設定 SMTP_ALLOW_UNAUTHORIZED_CERT=true，已設置 NODE_TLS_REJECT_UNAUTHORIZED=1 (允許未授權證書連接)');
+        console.log('User setting SMTP_ALLOW_UNAUTHORIZED_CERT=true, set NODE_TLS_REJECT_UNAUTHORIZED=1 (allow unauthorized certificate connections)');
       }
     } else {
       // 如果使用者設定不允許未授權證書，則設置為0（嚴格拒絕未授權證書）
       if (process.env.NODE_TLS_REJECT_UNAUTHORIZED !== '0') {
         process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-        console.log('使用者設定 SMTP_ALLOW_UNAUTHORIZED_CERT=false，已設置 NODE_TLS_REJECT_UNAUTHORIZED=0 (嚴格SSL驗證，拒絕未授權證書)');
+        console.log('User setting SMTP_ALLOW_UNAUTHORIZED_CERT=false, set NODE_TLS_REJECT_UNAUTHORIZED=0 (strict SSL validation, reject unauthorized certificates)');
       }
     }
 
@@ -208,26 +208,26 @@ export class MailService {
       smtpConfig.tls = false;
       smtpConfig.allowUnauthorizedTls = false;
       
-      console.log('檢測到25端口，已設定為非TLS/SSL模式');
+      console.log('Port 25 detected, configured for non-TLS/SSL mode');
       logConfigSafely({
         host: smtpConfig.host,
         port: smtpConfig.port,
         secure: smtpConfig.secure,
         ignoreTLS: smtpConfig.ignoreTLS
-      }, 'SMTP設定');
+      }, 'SMTP Configuration');
     } else {
       // 對於其他端口，添加SSL證書處理
-      console.log('檢測到加密端口，已設定SSL證書處理選項');
+      console.log('Encrypted port detected, SSL certificate handling options configured');
       logConfigSafely({
         host: smtpConfig.host,
         port: smtpConfig.port,
         secure: smtpConfig.secure,
         tls: smtpConfig.tls,
         allowUnauthorizedTls: smtpConfig.allowUnauthorizedTls
-      }, 'SMTP設定');
+      }, 'SMTP Configuration');
     }
 
-    logConfigSafely(smtpConfig, '最終SMTP設定');
+    logConfigSafely(smtpConfig, 'Final SMTP Configuration');
 
     this.smtpTransporter = nodemailer.createTransport(smtpConfig);
 
@@ -243,7 +243,7 @@ export class MailService {
 
     // 監聽IMAP連接錯誤
     this.imapClient.on('error', (err: Error) => {
-      console.error('IMAP錯誤:', err);
+      console.error('IMAP Error:', err);
       this.isImapConnected = false;
     });
   }
@@ -301,7 +301,7 @@ export class MailService {
       const info = await this.smtpTransporter.sendMail(mailOptions);
       return { success: true, messageId: info.messageId };
     } catch (error) {
-      console.error('發送郵件錯誤:', error);
+      console.error('Email sending error:', error);
       return { success: false, error: error instanceof Error ? error.message : String(error) };
     }
   }
@@ -462,7 +462,7 @@ export class MailService {
                     }));
                     message.hasAttachments = parsed.attachments.length > 0;
                   }).catch(err => {
-                    console.error('解析郵件內容錯誤:', err);
+                    console.error('Error parsing email content:', err);
                   });
                 }
               });
@@ -612,7 +612,7 @@ export class MailService {
                 bodyParsed = true;
                 checkAndResolve();
               }).catch(err => {
-                console.error('解析郵件詳情錯誤:', err);
+                console.error('Error parsing email details:', err);
                 reject(err);
               });
             });
@@ -636,7 +636,7 @@ export class MailService {
           endReceived = true;
           // 如果郵件沒有內容，或者處理過程中出現問題，嘗試確保至少返回空結果
           if (!bodyParsed && !mailItem) {
-            console.log(`沒有找到UID為${numericUid}的郵件或郵件內容為空`);
+            console.log(`Email with UID ${numericUid} not found or email content is empty`);
           }
           checkAndResolve();
         });
@@ -819,7 +819,7 @@ export class MailService {
     const folders = options.folders || ['INBOX'];
     const maxResults = options.maxResults || 100;
     
-    console.log(`執行高級搜索，文件夾: ${folders.join(', ')}, 關鍵詞: ${options.keywords || '無'}`);
+    console.log(`Performing advanced search, folders: ${folders.join(', ')}, keywords: ${options.keywords || 'none'}`);
     
     // 對每個文件夾執行搜索
     for (const folder of folders) {
@@ -868,7 +868,7 @@ export class MailService {
           allResults.push(...folderResults);
         }
       } catch (error) {
-        console.error(`搜索文件夾 ${folder} 時出錯:`, error);
+        console.error(`Error searching folder ${folder}:`, error);
         // 繼續搜索其他文件夾
       }
     }
@@ -987,7 +987,7 @@ export class MailService {
           }
         });
       } catch (error) {
-        console.error(`從文件夾 ${folder} 收集聯系人時出錯:`, error);
+        console.error(`Error collecting contacts from folder ${folder}:`, error);
         // 繼續處理其他文件夾
       }
     }
@@ -1021,12 +1021,12 @@ export class MailService {
    */
   async getAttachment(uid: number, folder: string = 'INBOX', attachmentIndex: number): Promise<{ filename: string; content: Buffer; contentType: string } | null> {
     await this.connectImap();
-    console.log(`正在獲取UID ${uid} 的第 ${attachmentIndex} 個附件...`);
+    console.log(`Getting attachment ${attachmentIndex} for UID ${uid}...`);
 
     return new Promise((resolve, reject) => {
       this.imapClient.openBox(folder, true, (err) => {
         if (err) {
-          console.error(`打開文件夾 ${folder} 失敗:`, err);
+          console.error(`Failed to open folder ${folder}:`, err);
           reject(err);
           return;
         }
@@ -1048,22 +1048,22 @@ export class MailService {
               const attachments = this.findAttachmentParts(struct);
               
               if (attachments.length <= attachmentIndex) {
-                console.log(`附件索引 ${attachmentIndex} 超出範圍，附件總數: ${attachments.length}`);
+                console.log(`Attachment index ${attachmentIndex} out of range, total attachments: ${attachments.length}`);
                 resolve(null);
                 return;
               }
               
               attachmentInfo = attachments[attachmentIndex];
-              console.log(`找到附件信息:`, attachmentInfo);
+              console.log(`Found attachment info:`, attachmentInfo);
             } catch (error) {
-              console.error(`解析附件結構時出錯:`, error);
+              console.error(`Error parsing attachment structure:`, error);
               reject(error);
             }
           });
           
           msg.once('end', () => {
             if (!attachmentInfo) {
-              console.log(`未找到附件或附件索引無效`);
+              console.log(`Attachment not found or attachment index invalid`);
               resolve(null);
               return;
             }
@@ -1083,22 +1083,22 @@ export class MailService {
                 });
                 
                 stream.once('end', () => {
-                  console.log(`附件內容下載完成，大小: ${buffer.length} 字節`);
+                  console.log(`Attachment content download completed, size: ${buffer.length} bytes`);
                 });
               });
               
               msg.once('end', () => {
-                console.log(`附件消息處理完成`);
+                console.log(`Attachment message processing completed`);
               });
             });
             
             attachmentFetch.once('error', (err) => {
-              console.error(`獲取附件內容時出錯:`, err);
+              console.error(`Error getting attachment content:`, err);
               reject(err);
             });
             
             attachmentFetch.once('end', () => {
-              console.log(`附件獲取流程結束`);
+              console.log(`Attachment retrieval process completed`);
               resolve({
                 filename: attachmentInfo!.filename,
                 content: buffer,
@@ -1109,13 +1109,13 @@ export class MailService {
         });
         
         f.once('error', (err) => {
-          console.error(`獲取郵件時出錯:`, err);
+          console.error(`Error getting email:`, err);
           reject(err);
         });
         
         f.once('end', () => {
           if (!attachmentInfo) {
-            console.log(`未找到附件或結構中沒有附件`);
+            console.log(`Attachment not found or no attachments in structure`);
             resolve(null);
           }
         });
@@ -1278,7 +1278,7 @@ export class MailService {
 
     // 如果有5分鐘內的未讀郵件，返回特殊狀態
     if (existingMails.length > 0) {
-      console.log(`[waitForNewReply] 發現${existingMails.length}封最近5分鐘內的未讀郵件，需要先處理`);
+      console.log(`[waitForNewReply] Found ${existingMails.length} unread emails in the last 5 minutes, need to process first`);
       return {
         type: 'unread_warning',
         mails: existingMails
@@ -1320,7 +1320,7 @@ export class MailService {
 
         // 記錄初始郵件數量
         initialCount = mailbox.messages.total;
-        console.log(`[waitForNewReply] 初始郵件數量: ${initialCount}，開始等待新郵件回覆...`);
+        console.log(`[waitForNewReply] Initial email count: ${initialCount}, starting to wait for new email replies...`);
 
         // 每5秒檢查一次新郵件
         checkInterval = setInterval(async () => {
@@ -1332,7 +1332,7 @@ export class MailService {
               if (err || isResolved) return;
 
               const currentCount = mailbox.messages.total;
-              console.log(`[waitForNewReply] 當前郵件數量: ${currentCount}，初始數量: ${initialCount}`);
+              console.log(`[waitForNewReply] Current email count: ${currentCount}, initial count: ${initialCount}`);
 
               if (currentCount > initialCount) {
                 // 有新郵件，獲取最新的郵件
@@ -1346,19 +1346,19 @@ export class MailService {
                     // 獲取完整的郵件內容
                     const fullMail = await this.getMailDetail(messages[0].uid, folder);
                     if (fullMail) {
-                      console.log(`[waitForNewReply] 收到新郵件回覆，主題: "${fullMail.subject}"`);
+                      console.log(`[waitForNewReply] Received new email reply, subject: "${fullMail.subject}"`);
                       isResolved = true;
                       cleanup();
                       resolve(fullMail);
                     }
                   }
                 } catch (error) {
-                  console.error('[waitForNewReply] 獲取新郵件失敗:', error);
+                  console.error('[waitForNewReply] Failed to get new email:', error);
                 }
               }
             });
           } catch (error) {
-            console.error('[waitForNewReply] 檢查新郵件時出錯:', error);
+            console.error('[waitForNewReply] Error checking for new emails:', error);
           }
         }, 5000);
       });
@@ -1371,7 +1371,7 @@ export class MailService {
   async testSmtpConnection(): Promise<{ success: boolean; error?: string; config?: any }> {
     this.validateConfigForOperation();
     try {
-      console.log('正在測試SMTP連線...');
+      console.log('Testing SMTP connection...');
       
       // 驗證配置
       const config = {
@@ -1386,7 +1386,7 @@ export class MailService {
 
       if (this.config.smtp.port === 25) {
         config.secure = false;
-        console.log('檢測到25端口，使用非TLS模式');
+        console.log('Port 25 detected, using non-TLS mode');
       }
 
       logConfigSafely({
@@ -1394,12 +1394,12 @@ export class MailService {
         port: config.port,
         secure: config.secure,
         auth: config.auth
-      }, 'SMTP設定');
+      }, 'SMTP Configuration');
 
       // 測試連接
       await this.smtpTransporter.verify();
       
-      console.log('SMTP連線測試成功！');
+      console.log('SMTP connection test successful!');
       return { 
         success: true, 
         config: {
@@ -1410,7 +1410,7 @@ export class MailService {
       };
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
-      console.error('SMTP連接測試失敗:', errorMessage);
+      console.error('SMTP connection test failed:', errorMessage);
       return { 
         success: false, 
         error: errorMessage,

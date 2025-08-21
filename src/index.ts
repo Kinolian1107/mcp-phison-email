@@ -14,7 +14,7 @@ async function main() {
 
   // 檢查程序互斥
   if (!await processManager.checkAndCreateLock()) {
-    console.log('無法建立MCP實例，程序退出');
+    console.log('Unable to create MCP instance, process exiting');
     process.exit(1);
   }
 
@@ -24,13 +24,13 @@ async function main() {
 
   // 處理程序退出
   process.on('SIGINT', async () => {
-    console.log('正在關閉郵件MCP服務...');
+    console.log('Shutting down Mail MCP service...');
     await mailMCP.close();
     process.exit(0);
   });
 
   process.on('SIGTERM', async () => {
-    console.log('正在關閉郵件MCP服務...');
+    console.log('Shutting down Mail MCP service...');
     await mailMCP.close();
     process.exit(0);
   });
@@ -38,6 +38,6 @@ async function main() {
 
 // 啟動應用
 main().catch(error => {
-  console.error('MCP服務啟動失敗:', error);
+  console.error('MCP service startup failed:', error);
   process.exit(1);
 }); 
