@@ -27,4 +27,4 @@ COPY --from=builder /app/dist ./dist
 
 EXPOSE 8299
 
-ENTRYPOINT ["node", "dist/sse-server.js", "--port", "8299", "--host", "localhost"]
+ENTRYPOINT ["node", "dist/sse-server.js", "--port", "8299", "--host", "0.0.0.0"]

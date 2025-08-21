@@ -86,15 +86,15 @@ class MailSSEServer {
       DEFAULT_FROM_EMAIL: getHeader('DEFAULT_FROM_EMAIL') || '',
     };
 
-    // Validate required headers
+    // Validate required headers (allow empty strings for initial setup)
     const requiredHeaders = [
       'SMTP_HOST', 'SMTP_USER', 'SMTP_PASS',
       'IMAP_HOST', 'IMAP_USER', 'IMAP_PASS'
     ];
 
     for (const header of requiredHeaders) {
-      if (!config[header as keyof MailConfig]) {
-        throw new Error(`Missing required header: ${header}`);
+      if (config[header as keyof MailConfig] === undefined) {
+        throw new Error(`Missing required header: ${header}. Empty strings are allowed for initial MCP client setup.`);
       }
     }
 
@@ -110,11 +110,9 @@ class MailSSEServer {
         // Extract configuration from headers
         const config = this.extractConfigFromHeaders(req);
 
-        // Set environment variables for this session
+        // Set environment variables for this session (including empty strings)
         Object.entries(config).forEach(([key, value]) => {
-          if (value) {
-            process.env[key] = value;
-          }
+          process.env[key] = value || '';
         });
 
         // Create SSE transport
@@ -207,7 +205,7 @@ class MailSSEServer {
 
       // Handle graceful shutdown
       process.on('SIGINT', async () => {
-        console.log('正在关闭邮件MCP SSE服务...');
+        console.log('正在關閉郵件MCP SSE服務...');
         
         // Close all active connections
         for (const [sessionId, entry] of this.transports) {
@@ -221,7 +219,7 @@ class MailSSEServer {
       });
 
       process.on('SIGTERM', async () => {
-        console.log('正在关闭邮件MCP SSE服务...');
+        console.log('正在關閉郵件MCP SSE服務...');
         
         // Close all active connections
         for (const [sessionId, entry] of this.transports) {

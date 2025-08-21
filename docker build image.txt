@@ -1,3 +1,7 @@
-docker build --load --tag "harbor.phison.com/mcp/mcp-phison-email:kn-v1.0.0" .
+docker build --load --tag "harbor.phison.com/mcp/mcp-prosuite-email:kn-v1.0.0" .
 
-docker run -it --rm -d --name=mcp--phison-email -p 18306:8299 "harbor.phison.com/mcp/mcp-phison-email:kn-v1.0.0"
+docker run -it --rm -d --name=mcp--prosuite-email -p 18307:8299 --network phison-network "harbor.phison.com/mcp/mcp-prosuite-email:kn-v1.0.0"
+
+{"mcpServers":{"prosuite-email":{"url":"http://mcp--prosuite-email:8299/sse","headers":{"SMTP_HOST":"","SMTP_PORT":"","SMTP_SECURE":"","SMTP_USER":"","SMTP_PASS":"","SMTP_ALLOW_UNAUTHORIZED_CERT":"","IMAP_HOST":"","IMAP_PORT":"","IMAP_SECURE":"","IMAP_USER":"","IMAP_PASS":"","DEFAULT_FROM_NAME":"","DEFAULT_FROM_EMAIL":""}}}}
+
+
