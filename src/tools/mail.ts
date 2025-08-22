@@ -14,8 +14,8 @@ export class MailMCP {
   constructor() {
     // 初始化MCP服務器
     this.server = new McpServer({
-      name: "phison-mail-mcp",
-      version: "1.0.2"
+      name: "mcp-prosuite-email",
+      version: "1.0.3"
     });
 
     // 註冊工具
@@ -292,7 +292,7 @@ Note: Empty strings are allowed for initial MCP client setup
         attachments: z.array(
           z.object({
             filename: z.string(),
-            content: z.instanceof(Buffer), //z.union([z.string(), z.instanceof(Buffer)]),
+            content: z.union([z.string(), z.instanceof(Buffer)]),
             contentType: z.string().optional()
           })
         ).optional()
@@ -420,7 +420,7 @@ Note: Empty strings are allowed for initial MCP client setup
         attachments: z.array(
           z.object({
             filename: z.string(),
-            content: z.instanceof(Buffer),//z.union([z.string(), z.instanceof(Buffer)]),
+            content: z.union([z.string(), z.instanceof(Buffer)]),
             contentType: z.string().optional()
           })
         ).optional()
