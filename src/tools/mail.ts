@@ -15,7 +15,7 @@ export class MailMCP {
     // 初始化MCP服務器
     this.server = new McpServer({
       name: "phison-mail-mcp",
-      version: "1.0.0"
+      version: "1.0.2"
     });
 
     // 註冊工具
@@ -203,7 +203,7 @@ Note: Empty strings are allowed for initial MCP client setup
         attachments: z.array(
           z.object({
             filename: z.string(),
-            content: z.union([z.string(), z.instanceof(Buffer)]),
+            content: z.instanceof(Buffer),
             contentType: z.string().optional()
           })
         ).optional()
@@ -292,7 +292,7 @@ Note: Empty strings are allowed for initial MCP client setup
         attachments: z.array(
           z.object({
             filename: z.string(),
-            content: z.union([z.string(), z.instanceof(Buffer)]),
+            content: z.instanceof(Buffer), //z.union([z.string(), z.instanceof(Buffer)]),
             contentType: z.string().optional()
           })
         ).optional()
@@ -420,7 +420,7 @@ Note: Empty strings are allowed for initial MCP client setup
         attachments: z.array(
           z.object({
             filename: z.string(),
-            content: z.union([z.string(), z.instanceof(Buffer)]),
+            content: z.instanceof(Buffer),//z.union([z.string(), z.instanceof(Buffer)]),
             contentType: z.string().optional()
           })
         ).optional()
@@ -561,8 +561,8 @@ Note: Empty strings are allowed for initial MCP client setup
       {
         keywords: z.string().optional(),
         folders: z.array(z.string()).optional(),
-        startDate: z.union([z.date(), z.string().describe("startDate must be a valid ISO 8601 datetime string or a Date object. e.g. 2025-08-21T00:00:00Z").datetime({ message: "startDate must be a valid ISO 8601 datetime string or a Date object. e.g. 2025-08-21T00:00:00Z" })]).optional(),
-        endDate: z.union([z.date(), z.string().describe("endDate must be a valid ISO 8601 datetime string or a Date object. e.g. 2025-08-21T00:00:00Z").datetime({ message: "endDate must be a valid ISO 8601 datetime string or a Date object. e.g. 2025-08-21T00:00:00Z" })]).optional(),
+        startDate: z.string().datetime({ message: "startDate must be a valid ISO 8601 datetime string. e.g. 2025-08-21T00:00:00Z" }).describe("startDate must be a valid ISO 8601 datetime string. e.g. 2025-08-21T00:00:00Z").optional(),
+        endDate: z.string().datetime({ message: "endDate must be a valid ISO 8601 datetime string. e.g. 2025-08-21T00:00:00Z" }).describe("endDate must be a valid ISO 8601 datetime string. e.g. 2025-08-21T00:00:00Z").optional(),
         from: z.string().optional(),
         to: z.string().optional(),
         subject: z.string().optional(),
@@ -657,8 +657,8 @@ Note: Empty strings are allowed for initial MCP client setup
         from: z.string().optional(),
         to: z.string().optional(),
         subject: z.string().optional(),
-        fromDate: z.union([z.date(), z.string().describe("fromDate must be a valid ISO 8601 datetime string or a Date object. e.g. 2025-08-21T00:00:00Z").datetime({ message: "fromDate must be a valid ISO 8601 datetime string or a Date object. e.g. 2025-08-21T00:00:00Z" })]).optional(),
-        toDate: z.union([z.date(), z.string().describe("toDate must be a valid ISO 8601 datetime string or a Date object. e.g. 2025-08-21T00:00:00Z").datetime({ message: "toDate must be a valid ISO 8601 datetime string or a Date object. e.g. 2025-08-21T00:00:00Z" })]).optional(),
+        fromDate: z.string().datetime({ message: "fromDate must be a valid ISO 8601 datetime string. e.g. 2025-08-21T00:00:00Z" }).describe("fromDate must be a valid ISO 8601 datetime string. e.g. 2025-08-21T00:00:00Z").optional(),
+        toDate: z.string().datetime({ message: "toDate must be a valid ISO 8601 datetime string. e.g. 2025-08-21T00:00:00Z" }).describe("toDate must be a valid ISO 8601 datetime string. e.g. 2025-08-21T00:00:00Z").optional(),
         hasAttachments: z.boolean().optional()
       },
       async (params) => {
