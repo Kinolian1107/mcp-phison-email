@@ -15,7 +15,7 @@ export class MailMCP {
     // 初始化MCP服務器
     this.server = new McpServer({
       name: "mcp-prosuite-email",
-      version: "1.0.3"
+      version: "1.0.5"
     });
 
     // 註冊工具
@@ -560,7 +560,7 @@ Note: Empty strings are allowed for initial MCP client setup
       "Search for emails across multiple folders using keywords, date ranges, sender/recipient filters. Provides comprehensive email search capabilities.",
       {
         keywords: z.string().optional(),
-        folders: z.array(z.string()).optional(),
+        folders: z.array(z.string()).describe("By default, this parameter is not given. Give the user an array of folders to search, for example ['INBOX', 'BACKUP']").optional(),
         startDate: z.string().datetime({ message: "startDate must be a valid ISO 8601 datetime string. e.g. 2025-08-21T00:00:00Z" }).describe("startDate must be a valid ISO 8601 datetime string. e.g. 2025-08-21T00:00:00Z").optional(),
         endDate: z.string().datetime({ message: "endDate must be a valid ISO 8601 datetime string. e.g. 2025-08-21T00:00:00Z" }).describe("endDate must be a valid ISO 8601 datetime string. e.g. 2025-08-21T00:00:00Z").optional(),
         from: z.string().optional(),
