@@ -5,9 +5,6 @@ WORKDIR /app
 # 升級 Alpine 系統套件以修復 OpenSSL 等安全性弱點 (CVE-2025-15467 等)
 RUN apk update && apk upgrade --no-cache
 
-# 升級 npm 自身以修復其內部套件 (tar, glob, minimatch, diff 等) 的安全性弱點
-RUN npm install -g npm@latest
-
 # 複製 package.json 和 package-lock.json 使用 * 可以同時複製 package.json 和 package-lock.json
 COPY package*.json ./
 
@@ -28,12 +25,15 @@ WORKDIR /app
 # 升級 Alpine 系統套件以修復 OpenSSL 等安全性弱點 (CVE-2025-15467 等)
 RUN apk update && apk upgrade --no-cache
 
-# 升級 npm 自身以修復其內部套件 (tar, glob, minimatch, diff 等) 的安全性弱點
-RUN npm install -g npm@latest
-
 COPY package*.json ./
 
-RUN npm install --omit=dev
+# 安裝生產套件後移除 npm，避免 npm 內部套件 (tar, glob, minimatch, diff) 被 Trivy 掃描到
+# 執行期只需要 node 執行環境，不需要 npm
+RUN npm install --omit=dev && \
+    npm cache clean --force && \
+    rm -rf /usr/local/lib/node_modules/npm \
+           /usr/local/bin/npm \
+           /usr/local/bin/npx
 
 COPY --from=builder /app/dist ./dist
 
