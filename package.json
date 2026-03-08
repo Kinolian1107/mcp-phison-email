@@ -5,7 +5,8 @@
   "main": "dist/index.js",
   "type": "module",
   "scripts": {
-    "build": "tsc",
+    "build": "esbuild src/index.ts src/sse-server.ts src/tools/mail.ts src/tools/mail-service.ts src/tools/process-manager.ts --bundle=false --format=esm --platform=node --outdir=dist --outbase=src --sourcemap",
+    "typecheck": "tsc --noEmit",
     "start": "node dist/index.js",
     "start:sse": "node dist/sse-server.js",
     "dev": "ts-node-dev --respawn src/index.ts",
@@ -38,6 +39,7 @@
     "@types/imap": "^0.8.40",
     "@types/mailparser": "^3.4.0",
     "@types/nodemailer": "^6.4.9",
+    "esbuild": "^0.27.3",
     "ts-node": "^10.9.1",
     "ts-node-dev": "^2.0.0"
   },
