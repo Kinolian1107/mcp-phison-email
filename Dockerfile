@@ -1,6 +1,9 @@
-FROM node:lts-alpine AS builder
+FROM node:22-alpine AS builder
 
 WORKDIR /app
+
+# 升級 Alpine 系統套件以修復 OpenSSL 等安全性弱點 (CVE-2025-15467 等)
+RUN apk update && apk upgrade --no-cache
 
 # 複製 package.json 和 package-lock.json 使用 * 可以同時複製 package.json 和 package-lock.json
 COPY package*.json ./
@@ -15,9 +18,12 @@ RUN chmod +x /app/node_modules/.bin/tsc
 
 RUN npm run build
 
-FROM node:lts-alpine
+FROM node:22-alpine
 
 WORKDIR /app
+
+# 升級 Alpine 系統套件以修復 OpenSSL 等安全性弱點 (CVE-2025-15467 等)
+RUN apk update && apk upgrade --no-cache
 
 COPY package*.json ./
 
