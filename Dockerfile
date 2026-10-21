@@ -37,6 +37,9 @@ RUN npm install --omit=dev && \
 
 COPY --from=builder /app/dist ./dist
 
+# 以非 root 執行（node 使用者），使用數字 UID 以便 K8s runAsNonRoot 驗證
+USER 1000:1000
+
 EXPOSE 8299
 
 ENTRYPOINT ["node", "dist/sse-server.js", "--port", "8299", "--host", "0.0.0.0"]

@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { MailService, MailConfig, MailInfo, MailSearchOptions, MailItem } from './mail-service.js';
 import path from 'path';
 import fs from 'fs';
+import os from 'os';
 
 export class MailMCP {
   private server: McpServer;
@@ -1013,7 +1014,7 @@ Note: Empty strings are allowed for initial MCP client setup
           // 根據是否保存到文件處理附件
           if (params.saveToFile) {
             // 創建附件保存目錄
-            const downloadDir = path.join(process.cwd(), 'downloads');
+            const downloadDir = process.env.MCP_DOWNLOAD_DIR || path.join(os.tmpdir(), 'mcp-downloads');
             if (!fs.existsSync(downloadDir)) {
               fs.mkdirSync(downloadDir, { recursive: true });
             }
