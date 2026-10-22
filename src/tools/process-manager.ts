@@ -1,8 +1,9 @@
 import * as fs from 'fs';
+import * as os from 'os';
 import * as path from 'path';
 
-// 鎖檔案路徑設定
-const LOCK_FILE = path.join(process.cwd(), '.mcp-mail.lock');
+// 鎖檔案路徑設定（放在暫存目錄，支援唯讀根目錄）
+const LOCK_FILE = process.env.MCP_LOCK_FILE || path.join(os.tmpdir(), '.mcp-mail.lock');
 
 export class ProcessManager {
   private instanceId: string;

@@ -3,7 +3,6 @@
 import express from 'express';
 import { SSEServerTransport } from '@modelcontextprotocol/sdk/server/sse.js';
 import { MailMCP } from './tools/mail.js';
-import { ProcessManager } from './tools/process-manager.js';
 import { Request, Response } from 'express';
 
 // 隱藏密碼的工具函數
@@ -43,12 +42,10 @@ interface MailConfig {
 class MailSSEServer {
   private app: express.Application;
   private transports: Map<string, { transport: SSEServerTransport; mailMCP: MailMCP }> = new Map();
-  private processManager: ProcessManager;
 
   constructor() {
     this.app = express();
     this.app.use(express.json());
-    this.processManager = new ProcessManager();
     this.setupRoutes();
   }
 
@@ -185,12 +182,6 @@ class MailSSEServer {
   }
 
   public async start(port: number = 3000, host: string = '0.0.0.0') {
-    // Check process mutex
-    if (!await this.processManager.checkAndCreateLock()) {
-      console.log('Unable to create MCP instance, process exiting');
-      process.exit(1);
-    }
-
     return new Promise<void>((resolve, reject) => {
       const server = this.app.listen(port, host, () => {
         console.log(`Mail MCP SSE server running at ${host}:${port}`);
